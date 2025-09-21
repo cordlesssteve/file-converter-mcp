@@ -1,289 +1,232 @@
 # Document Organizer MCP Server
 
-A comprehensive Model Context Protocol (MCP) server for systematic document organization, PDF-to-Markdown conversion, and Universal Project Documentation Standard implementation.
+[![CI/CD Pipeline](https://github.com/cordlesssteve/document-organizer-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/cordlesssteve/document-organizer-mcp/actions/workflows/ci.yml)
+[![npm version](https://badge.fury.io/js/document-organizer-mcp.svg)](https://www.npmjs.com/package/document-organizer-mcp)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+A powerful Model Context Protocol (MCP) server for systematic document organization, PDF-to-Markdown conversion, and Universal Project Documentation Standard implementation.
 
 ## Features
 
-### 🔄 **PDF to Markdown Conversion**
-- **Marker Engine**: Superior quality conversion with table-aware formatting
-- **pymupdf4llm Engine**: Memory-efficient processing with customizable options
-- **Intelligent Cleaning**: Automatic formatting artifact removal and table optimization
-- **Batch Processing**: Selective conversion of unconverted documents
+### 🔄 PDF Conversion Engine
+- **Dual Engine Support**: marker (recommended) and pymupdf4llm
+- **Intelligent Table Preservation**: Advanced table-aware cleaning
+- **Image Extraction**: Optional embedded image extraction
+- **Memory Efficient**: Configurable processing for large documents
+- **Auto-Cleaning**: Removes marker formatting artifacts automatically
 
-### 📊 **Document Organization**
-- **Automated Discovery**: Recursive PDF scanning with detailed inventory
-- **Content Analysis**: AI-powered categorization (Research, Planning, Technical, etc.)
-- **Folder Structure Creation**: Hierarchical organization with custom categories
-- **Status Tracking**: Conversion status monitoring and reporting
+### 📊 Document Organization
+- **Recursive PDF Discovery**: Comprehensive file system scanning
+- **Conversion Status Auditing**: Track converted vs unconverted documents
+- **Intelligent Categorization**: Keyword-based content analysis
+- **Automated Folder Organization**: Category-based directory structures
+- **Full Workflow Automation**: End-to-end document processing pipeline
 
-### 📋 **Universal Project Documentation Standard**
-- **Project Initialization**: Create standardized documentation structure
-- **Plan Management**: ACTIVE/ARCHIVED/SUPERSEDED plan tracking
-- **Weekly Handoffs**: Automated progress reporting
-- **Compliance Validation**: Structure verification and issue detection
-
-### 🔄 **Complete Workflows**
-- **End-to-End Automation**: Discover → Convert → Analyze → Organize
-- **Memory Efficient**: Optimized for large document collections
-- **Error Recovery**: Comprehensive error handling and reporting
+### 📋 Universal Project Documentation Standard
+- **Standardized Structure**: Consistent documentation across all projects
+- **Status-Driven Plans**: ACTIVE, ARCHIVED, SUPERSEDED, BLOCKED statuses
+- **Weekly Progress Tracking**: Automated handoff documentation
+- **Compliance Validation**: Ensure adherence to documentation standards
+- **Template Generation**: Project-specific documentation templates
 
 ## Installation
 
 ```bash
-npm install document-organizer-mcp
+npm install -g document-organizer-mcp
 ```
 
-## Quick Start
+### Dependencies
 
-### PDF Conversion
+For PDF conversion functionality, install one or both engines:
 
-```typescript
-// Convert single PDF with marker (recommended)
-const result = await mcp.callTool('convert_pdf', {
-  pdf_path: '/path/to/document.pdf',
-  output_path: '/path/to/output.md',
-  options: {
-    engine: 'marker',
-    auto_clean: true
-  }
-});
+```bash
+# Marker (recommended for complex documents)
+pip install marker-pdf
 
-// Batch convert missing PDFs
-const batchResult = await mcp.callTool('document_organizer__convert_missing', {
-  directory_path: '/path/to/documents'
-});
+# pymupdf4llm (lightweight alternative)
+pip install pymupdf4llm
 ```
 
-### Document Organization
+## Usage
 
-```typescript
-// Discover all PDFs recursively
-const discovery = await mcp.callTool('document_organizer__discover_pdfs', {
-  directory_path: '/path/to/documents',
-  recursive: true
-});
+### MCP Configuration
 
-// Analyze content for categorization
-const analysis = await mcp.callTool('document_organizer__analyze_content', {
-  directory_path: '/path/to/documents'
-});
-
-// Complete workflow automation
-const workflow = await mcp.callTool('document_organizer__full_workflow', {
-  directory_path: '/path/to/documents',
-  analyze_content: true
-});
-```
-
-### Project Documentation
-
-```typescript
-// Initialize project documentation standard
-const projectInit = await mcp.callTool('document_organizer__init_project_docs', {
-  directory_path: '/path/to/project',
-  project_name: 'My Project',
-  project_type: 'web-app'
-});
-
-// Validate documentation structure
-const validation = await mcp.callTool('document_organizer__validate_doc_structure', {
-  directory_path: '/path/to/project'
-});
-
-// Create weekly handoff
-const handoff = await mcp.callTool('document_organizer__create_weekly_handoff', {
-  project_path: '/path/to/project',
-  completed_items: ['Implemented user authentication', 'Fixed database migration'],
-  key_decisions: ['Chose PostgreSQL over MongoDB', 'Adopted TypeScript for type safety']
-});
-```
-
-## Available Tools
-
-### PDF Conversion Tools
-
-- **`convert_pdf`** - Convert PDF to Markdown with advanced options
-- **`check_dependency`** - Verify and install PDF conversion dependencies
-- **`document_organizer__convert_missing`** - Batch convert unconverted PDFs
-
-### Document Organization Tools
-
-- **`document_organizer__discover_pdfs`** - Recursively find all PDF files
-- **`document_organizer__check_conversions`** - Audit conversion status
-- **`document_organizer__analyze_content`** - AI-powered content categorization
-- **`document_organizer__organize_structure`** - Create organized folder structure
-- **`document_organizer__full_workflow`** - Complete automation pipeline
-
-### Project Documentation Tools
-
-- **`document_organizer__init_project_docs`** - Initialize documentation standard
-- **`document_organizer__archive_plan`** - Archive development plans
-- **`document_organizer__validate_doc_structure`** - Validate compliance
-- **`document_organizer__create_weekly_handoff`** - Generate progress reports
-
-## Engine Comparison
-
-| Feature | Marker | pymupdf4llm |
-|---------|--------|-------------|
-| **Quality** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ |
-| **Table Handling** | Excellent | Good |
-| **Speed** | Medium | Fast |
-| **Memory Usage** | Medium | Low |
-| **Structured Content** | Excellent | Good |
-| **Large Files** | Good | Excellent |
-| **Dependencies** | External binary | Python only |
-
-**Recommendation**: Use **marker** for highest quality output, especially for documents with complex tables and structured content.
-
-## Universal Project Documentation Standard
-
-### Required Files Structure
-
-```
-project-root/
-├── CURRENT_STATUS.md          # Current reality and progress
-├── ACTIVE_PLAN.md             # Currently executing plan
-├── .claude-instructions.md     # Project-specific Claude guidance
-└── docs/
-    ├── plans/
-    │   ├── archived/           # Completed plans
-    │   └── superseded/         # Replaced plans
-    ├── progress/
-    │   └── YYYY-MM/           # Monthly progress logs
-    └── reference/             # Technical documentation
-```
-
-### Plan Status Headers
-
-Every plan document must include:
-
-```markdown
-# Plan Title
-**Status:** ACTIVE | ARCHIVED | SUPERSEDED | BLOCKED
-**Created:** YYYY-MM-DD
-**Last Updated:** YYYY-MM-DD
-```
-
-### Weekly Handoff Protocol
-
-1. Update `CURRENT_STATUS.md` with actual progress
-2. Archive completed plans to `docs/plans/archived/`
-3. Create weekly progress log in `docs/progress/YYYY-MM/`
-4. Update component status matrix
-
-## Configuration
-
-### MCP Server Setup
+Add to your MCP client configuration:
 
 ```json
 {
   "mcpServers": {
     "document-organizer": {
-      "command": "document-organizer-mcp"
+      "command": "document-organizer-mcp",
+      "args": []
     }
   }
 }
 ```
 
-### Dependencies
+### Available Tools
 
-**For Marker (Recommended)**:
+#### PDF Conversion Tools
+- `convert_pdf` - Convert PDF to Markdown with configurable options
+- `check_dependency` - Verify and optionally install conversion engines
+
+#### Document Organization Tools
+- `document_organizer__discover_pdfs` - Recursively find all PDF files
+- `document_organizer__check_conversions` - Audit conversion status
+- `document_organizer__convert_missing` - Convert only unconverted PDFs
+- `document_organizer__analyze_content` - Categorize documents by content
+- `document_organizer__organize_structure` - Create organized folder hierarchies
+- `document_organizer__full_workflow` - Complete automation pipeline
+
+#### Documentation Standard Tools
+- `document_organizer__init_project_docs` - Initialize standard documentation structure
+- `document_organizer__validate_doc_structure` - Validate compliance
+- `document_organizer__archive_plan` - Archive development plans
+- `document_organizer__create_weekly_handoff` - Generate progress reports
+
+## Examples
+
+### Basic PDF Conversion
+
+```typescript
+// Convert a single PDF using marker engine
+await client.callTool("convert_pdf", {
+  pdf_path: "/path/to/document.pdf",
+  output_path: "/path/to/output.md",
+  options: {
+    engine: "marker",
+    auto_clean: true
+  }
+});
+```
+
+### Full Document Organization Workflow
+
+```typescript
+// Discover, convert, and organize all documents
+await client.callTool("document_organizer__full_workflow", {
+  directory_path: "/path/to/documents",
+  analyze_content: true
+});
+```
+
+### Initialize Project Documentation
+
+```typescript
+// Set up Universal Project Documentation Standard
+await client.callTool("document_organizer__init_project_docs", {
+  directory_path: "/path/to/project",
+  project_name: "My Project",
+  project_type: "web-app"
+});
+```
+
+## Configuration Options
+
+### PDF Conversion Options
+
+```typescript
+interface ConversionOptions {
+  engine?: "marker" | "pymupdf4llm";     // Conversion engine
+  auto_clean?: boolean;                  // Auto-clean marker output
+  page_chunks?: boolean;                 // Process as individual pages
+  write_images?: boolean;                // Extract embedded images
+  image_path?: string;                   // Image extraction directory
+  table_strategy?: "fast" | "accurate";  // Table extraction strategy
+  extract_content?: "text" | "figures" | "both"; // Content types
+}
+```
+
+### Document Categories
+
+Automatic categorization supports:
+- **Research**: Analysis, studies, investigations
+- **Planning**: Strategies, roadmaps, discussions
+- **Documentation**: Guides, manuals, references
+- **Technical**: Implementation, architecture, APIs
+- **Business**: Market analysis, commercial strategies
+- **General**: Uncategorized content
+
+## Universal Project Documentation Standard
+
+### Required Files
+- `CURRENT_STATUS.md` - Real-time project status
+- `ACTIVE_PLAN.md` - Currently executing plan
+- `.claude-instructions.md` - AI assistant instructions
+
+### Directory Structure
+```
+/docs/
+├── plans/
+│   ├── archived/     # Completed plans
+│   └── superseded/   # Replaced plans
+├── progress/YYYY-MM/ # Monthly progress logs
+└── reference/        # Technical documentation
+    ├── 01-architecture/
+    ├── 02-apis/
+    ├── 03-development/
+    └── ...
+```
+
+### Status Management
+- **ACTIVE**: Currently executing plan
+- **ARCHIVED**: Historical/completed plan
+- **SUPERSEDED**: Replaced by newer plan
+- **BLOCKED**: Waiting for external input
+
+## Development
+
 ```bash
-pip install marker-pdf
+# Clone repository
+git clone https://github.com/cordlesssteve/document-organizer-mcp.git
+cd document-organizer-mcp
+
+# Install dependencies
+npm install
+
+# Build project
+npm run build
+
+# Run development mode
+npm run dev
+
+# Run tests
+npm test
+
+# Lint code
+npm run lint
 ```
 
-**For pymupdf4llm**:
-```bash
-pip install pymupdf4llm
-```
+## Performance Considerations
 
-**Check availability**:
-```typescript
-const check = await mcp.callTool('check_dependency', {
-  install_if_missing: true
-});
-```
-
-## Advanced Usage
-
-### Custom Content Categories
-
-```typescript
-const categories = {
-  'Research': ['analysis', 'research', 'study'],
-  'Planning': ['plan', 'strategy', 'roadmap'],
-  'Technical': ['implementation', 'architecture', 'api'],
-  'Business': ['market', 'competitive', 'revenue']
-};
-
-const organized = await mcp.callTool('document_organizer__organize_structure', {
-  directory_path: '/path/to/docs',
-  categories,
-  create_pdf_md_subfolders: true
-});
-```
-
-### Batch Processing Workflow
-
-```typescript
-// 1. Discover and analyze
-const discovery = await mcp.callTool('document_organizer__discover_pdfs', {
-  directory_path: '/documents'
-});
-
-// 2. Check conversion status
-const status = await mcp.callTool('document_organizer__check_conversions', {
-  directory_path: '/documents'
-});
-
-// 3. Convert only missing files
-const conversions = await mcp.callTool('document_organizer__convert_missing', {
-  directory_path: '/documents'
-});
-
-// 4. Analyze and categorize
-const analysis = await mcp.callTool('document_organizer__analyze_content', {
-  directory_path: '/documents'
-});
-```
-
-## Performance Optimization
-
-### Memory Management
-- Use **pymupdf4llm** with `page_chunks: true` for large files
-- Process documents in batches for memory efficiency
-- Enable automatic cleanup with `auto_clean: true`
-
-### Processing Speed
-- **marker**: Better for quality-critical conversions
-- **pymupdf4llm**: Faster for large-scale batch processing
-- Use selective conversion to avoid reprocessing
+- **Memory Efficiency**: Use `page_chunks: true` for large PDFs
+- **Processing Speed**: marker is slower but higher quality than pymupdf4llm
+- **Batch Processing**: `convert_missing` tool optimizes bulk conversions
+- **Table Preservation**: marker with auto-cleaning provides best table formatting
 
 ## Error Handling
 
-The server provides comprehensive error reporting:
-
-```typescript
-{
-  "success": false,
-  "error": "Detailed error message",
-  "processing_time": 1500,
-  "warnings": ["Non-critical issues"]
-}
-```
+The server provides comprehensive error handling:
+- Dependency validation before operations
+- Graceful fallback between conversion engines
+- Detailed error messages with context
+- Progress tracking for long-running operations
 
 ## Contributing
 
 1. Fork the repository
 2. Create a feature branch
-3. Follow the Universal Documentation Standard
+3. Make your changes
 4. Add tests for new functionality
-5. Submit a pull request
+5. Ensure all tests pass
+6. Submit a pull request
 
 ## License
 
-MIT License - see LICENSE file for details
+MIT License - see [LICENSE](LICENSE) file for details.
 
 ## Support
 
-For issues and feature requests, please use the GitHub issues page.
+- [Issues](https://github.com/cordlesssteve/document-organizer-mcp/issues)
+- [Discussions](https://github.com/cordlesssteve/document-organizer-mcp/discussions)
+- [Wiki](https://github.com/cordlesssteve/document-organizer-mcp/wiki)

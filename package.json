@@ -1,16 +1,12 @@
 {
   "name": "document-organizer-mcp",
-  "version": "0.6.2",
-  "description": "MCP server for systematic document organization and PDF-to-Markdown conversion",
-  "license": "MIT",
-  "type": "module",
+  "version": "1.0.0",
+  "description": "MCP server for systematic document organization and PDF-to-Markdown conversion with Universal Project Documentation Standard support",
   "main": "dist/index.js",
+  "type": "module",
   "bin": {
     "document-organizer-mcp": "dist/index.js"
   },
-  "files": [
-    "dist"
-  ],
   "scripts": {
     "build": "tsc && chmod +x dist/index.js",
     "dev": "tsc --watch",
@@ -18,28 +14,33 @@
     "test": "jest",
     "lint": "eslint src --ext .ts"
   },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "document-organization",
+    "pdf-conversion",
+    "markdown",
+    "project-documentation",
+    "universal-standard"
+  ],
+  "author": "Claude Code User",
+  "license": "MIT",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.12.3",
-    "zod": "^3.23.8",
-    "zod-to-json-schema": "^3.23.5"
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "zod": "^3.22.0",
+    "zod-to-json-schema": "^3.22.0"
   },
   "devDependencies": {
-    "@types/node": "^22.0.0",
+    "@types/node": "^20.0.0",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "eslint": "^8.0.0",
     "jest": "^29.0.0",
-    "typescript": "^5.8.2"
+    "typescript": "^5.0.0"
   },
-  "keywords": [
-    "mcp",
-    "document-organizer",
-    "pdf-conversion",
-    "markdown",
-    "project-documentation",
-    "file-organization"
-  ],
-  "author": "cordlesssteve",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/cordlesssteve/document-organizer-mcp.git"

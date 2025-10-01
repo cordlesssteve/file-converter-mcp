@@ -1277,7 +1277,7 @@ async function analyzeMarkdownContent(mdPath: string): Promise<{ category: strin
 
 // MCP Server setup
 const server = new Server({
-  name: 'document-organizer',
+  name: 'file-converter',
   version: '1.0.0',
 }, {
   capabilities: {

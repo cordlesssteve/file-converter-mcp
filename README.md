@@ -4,30 +4,30 @@
 [![npm version](https://badge.fury.io/js/document-organizer-mcp.svg)](https://www.npmjs.com/package/document-organizer-mcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A powerful Model Context Protocol (MCP) server for systematic document organization, PDF-to-Markdown conversion, and Universal Project Documentation Standard implementation.
+A Model Context Protocol (MCP) server for PDF-to-Markdown conversion, document organization, and project documentation standardization.
 
 ## Features
 
-### 🔄 PDF Conversion Engine
-- **Dual Engine Support**: marker (recommended) and pymupdf4llm
-- **Intelligent Table Preservation**: Advanced table-aware cleaning
-- **Image Extraction**: Optional embedded image extraction
-- **Memory Efficient**: Configurable processing for large documents
-- **Auto-Cleaning**: Removes marker formatting artifacts automatically
+### PDF Conversion
+- Dual engine support: marker (recommended) and pymupdf4llm
+- Table-aware conversion with preservation
+- Optional image extraction from PDFs
+- Memory efficient processing for large documents
+- Automatic cleanup of conversion artifacts
 
-### 📊 Document Organization
-- **Recursive PDF Discovery**: Comprehensive file system scanning
-- **Conversion Status Auditing**: Track converted vs unconverted documents
-- **Intelligent Categorization**: Keyword-based content analysis
-- **Automated Folder Organization**: Category-based directory structures
-- **Full Workflow Automation**: End-to-end document processing pipeline
+### Document Organization
+- Recursive PDF discovery in directory trees
+- Conversion status tracking and auditing
+- Content-based document categorization
+- Automated folder organization by category
+- Bulk conversion workflows
 
-### 📋 Universal Project Documentation Standard
-- **Standardized Structure**: Consistent documentation across all projects
-- **Status-Driven Plans**: ACTIVE, ARCHIVED, SUPERSEDED, BLOCKED statuses
-- **Weekly Progress Tracking**: Automated handoff documentation
-- **Compliance Validation**: Ensure adherence to documentation standards
-- **Template Generation**: Project-specific documentation templates
+### Project Documentation Standards
+- Standardized documentation structure across projects
+- Status-driven development plans (ACTIVE, ARCHIVED, SUPERSEDED, BLOCKED)
+- Weekly progress tracking and handoff documentation
+- Compliance validation for documentation standards
+- Template generation for project-specific documentation
 
 ## Installation
 
@@ -127,12 +127,12 @@ await client.callTool("document_organizer__init_project_docs", {
 
 ```typescript
 interface ConversionOptions {
-  engine?: "marker" | "pymupdf4llm";     // Conversion engine
-  auto_clean?: boolean;                  // Auto-clean marker output
-  page_chunks?: boolean;                 // Process as individual pages
-  write_images?: boolean;                // Extract embedded images
-  image_path?: string;                   // Image extraction directory
-  table_strategy?: "fast" | "accurate";  // Table extraction strategy
+  engine?: "marker" | "pymupdf4llm";        // Conversion engine
+  auto_clean?: boolean;                     // Auto-clean marker output
+  page_chunks?: boolean;                    // Process as individual pages
+  write_images?: boolean;                   // Extract embedded images
+  image_path?: string;                      // Image extraction directory
+  table_strategy?: "fast" | "accurate";    // Table extraction strategy
   extract_content?: "text" | "figures" | "both"; // Content types
 }
 ```
@@ -158,10 +158,10 @@ Automatic categorization supports:
 ```
 /docs/
 ├── plans/
-│   ├── archived/     # Completed plans
-│   └── superseded/   # Replaced plans
-├── progress/YYYY-MM/ # Monthly progress logs
-└── reference/        # Technical documentation
+│   ├── archived/      # Completed plans
+│   └── superseded/    # Replaced plans
+├── progress/YYYY-MM/  # Monthly progress logs
+└── reference/         # Technical documentation
     ├── 01-architecture/
     ├── 02-apis/
     ├── 03-development/

@@ -1,50 +1,55 @@
-# Document Organizer MCP Server
+# File Converter MCP
 
-[![CI/CD Pipeline](https://github.com/cordlesssteve/document-organizer-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/cordlesssteve/document-organizer-mcp/actions/workflows/ci.yml)
-[![npm version](https://badge.fury.io/js/document-organizer-mcp.svg)](https://www.npmjs.com/package/document-organizer-mcp)
+[![CI/CD Pipeline](https://github.com/cordlesssteve/file-converter-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/cordlesssteve/file-converter-mcp/actions/workflows/ci.yml)
+[![npm version](https://badge.fury.io/js/file-converter-mcp.svg)](https://www.npmjs.com/package/file-converter-mcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A Model Context Protocol (MCP) server for PDF-to-Markdown conversion, document organization, and project documentation standardization.
+A Model Context Protocol (MCP) server that aggregates various file conversion tools for quick formatting and file type transformations.
 
 ## Features
 
-### PDF Conversion
-- Dual engine support: marker (recommended) and pymupdf4llm
-- Table-aware conversion with preservation
-- Optional image extraction from PDFs
-- Memory efficient processing for large documents
-- Automatic cleanup of conversion artifacts
+### Supported Conversions
 
-### Document Organization
-- Recursive PDF discovery in directory trees
-- Conversion status tracking and auditing
-- Content-based document categorization
-- Automated folder organization by category
-- Bulk conversion workflows
+- **PDF to Markdown** - Convert PDF documents to markdown format
+- **Image Format Conversion** - Transform between common image formats (PNG, JPG, WebP, etc.)
+- **Document Conversion** - Convert between document formats (DOCX, TXT, HTML, etc.)
+- **Spreadsheet Conversion** - Transform spreadsheet formats (CSV, XLSX, JSON, etc.)
+- **Code Format Conversion** - Convert between code formats and syntax highlighting
+- **Archive Operations** - Extract and create archive files (ZIP, TAR, etc.)
 
-### Project Documentation Standards
-- Standardized documentation structure across projects
-- Status-driven development plans (ACTIVE, ARCHIVED, SUPERSEDED, BLOCKED)
-- Weekly progress tracking and handoff documentation
-- Compliance validation for documentation standards
-- Template generation for project-specific documentation
+### Conversion Engines
+
+- **PDF Engine**: marker (recommended) and pymupdf4llm support
+- **Image Engine**: Sharp and ImageMagick integration
+- **Document Engine**: Pandoc integration for broad format support
+- **Archive Engine**: Built-in Node.js compression libraries
 
 ## Installation
 
 ```bash
-npm install -g document-organizer-mcp
+npm install -g file-converter-mcp
 ```
 
 ### Dependencies
 
-For PDF conversion functionality, install one or both engines:
+Install conversion engines based on your needs:
 
 ```bash
-# Marker (recommended for complex documents)
-pip install marker-pdf
+# PDF conversion engines
+pip install marker-pdf pymupdf4llm
 
-# pymupdf4llm (lightweight alternative)
-pip install pymupdf4llm
+# Image processing (choose one)
+npm install sharp
+# OR
+brew install imagemagick  # macOS
+apt-get install imagemagick  # Ubuntu
+
+# Document conversion
+brew install pandoc  # macOS
+apt-get install pandoc  # Ubuntu
+
+# Archive tools (usually pre-installed)
+# zip, unzip, tar, gzip
 ```
 
 ## Usage
@@ -56,8 +61,8 @@ Add to your MCP client configuration:
 ```json
 {
   "mcpServers": {
-    "document-organizer": {
-      "command": "document-organizer-mcp",
+    "file-converter": {
+      "command": "file-converter-mcp",
       "args": []
     }
   }
@@ -66,120 +71,146 @@ Add to your MCP client configuration:
 
 ### Available Tools
 
-#### PDF Conversion Tools
-- `convert_pdf` - Convert PDF to Markdown with configurable options
-- `check_dependency` - Verify and optionally install conversion engines
+#### PDF Conversion
+- `convert_pdf_to_markdown` - Convert PDF files to Markdown
+- `extract_pdf_text` - Extract plain text from PDF files
+- `extract_pdf_images` - Extract images from PDF files
 
-#### Document Organization Tools
-- `document_organizer__discover_pdfs` - Recursively find all PDF files
-- `document_organizer__check_conversions` - Audit conversion status
-- `document_organizer__convert_missing` - Convert only unconverted PDFs
-- `document_organizer__analyze_content` - Categorize documents by content
-- `document_organizer__organize_structure` - Create organized folder hierarchies
-- `document_organizer__full_workflow` - Complete automation pipeline
+#### Image Conversion
+- `convert_image_format` - Convert between image formats
+- `resize_image` - Resize images with quality options
+- `compress_image` - Reduce image file size
 
-#### Documentation Standard Tools
-- `document_organizer__init_project_docs` - Initialize standard documentation structure
-- `document_organizer__validate_doc_structure` - Validate compliance
-- `document_organizer__archive_plan` - Archive development plans
-- `document_organizer__create_weekly_handoff` - Generate progress reports
+#### Document Conversion
+- `convert_document` - Convert between document formats using Pandoc
+- `extract_document_text` - Extract text from various document formats
+- `convert_markdown_to_html` - Convert Markdown to HTML with styling
+
+#### Spreadsheet Conversion
+- `convert_csv_to_json` - Convert CSV data to JSON format
+- `convert_json_to_csv` - Convert JSON data to CSV format
+- `convert_xlsx_to_csv` - Extract CSV data from Excel files
+
+#### Archive Operations
+- `create_archive` - Create ZIP or TAR archives from files/folders
+- `extract_archive` - Extract contents from archive files
+- `list_archive_contents` - List files in archive without extracting
+
+#### Utility Tools
+- `detect_file_type` - Identify file format and encoding
+- `validate_conversion` - Check if conversion is supported
+- `batch_convert` - Convert multiple files in one operation
 
 ## Examples
 
 ### Basic PDF Conversion
 
 ```typescript
-// Convert a single PDF using marker engine
-await client.callTool("convert_pdf", {
-  pdf_path: "/path/to/document.pdf",
+// Convert PDF to Markdown
+await client.callTool("convert_pdf_to_markdown", {
+  input_path: "/path/to/document.pdf",
   output_path: "/path/to/output.md",
   options: {
     engine: "marker",
-    auto_clean: true
+    preserve_formatting: true
   }
 });
 ```
 
-### Full Document Organization Workflow
+### Image Format Conversion
 
 ```typescript
-// Discover, convert, and organize all documents
-await client.callTool("document_organizer__full_workflow", {
-  directory_path: "/path/to/documents",
-  analyze_content: true
+// Convert PNG to WebP with compression
+await client.callTool("convert_image_format", {
+  input_path: "/path/to/image.png",
+  output_path: "/path/to/image.webp",
+  options: {
+    quality: 80,
+    format: "webp"
+  }
 });
 ```
 
-### Initialize Project Documentation
+### Document Conversion
 
 ```typescript
-// Set up Universal Project Documentation Standard
-await client.callTool("document_organizer__init_project_docs", {
-  directory_path: "/path/to/project",
-  project_name: "My Project",
-  project_type: "web-app"
+// Convert DOCX to Markdown using Pandoc
+await client.callTool("convert_document", {
+  input_path: "/path/to/document.docx",
+  output_path: "/path/to/document.md",
+  options: {
+    format: "markdown",
+    preserve_styles: false
+  }
+});
+```
+
+### Batch Operations
+
+```typescript
+// Convert multiple files at once
+await client.callTool("batch_convert", {
+  input_directory: "/path/to/input/",
+  output_directory: "/path/to/output/",
+  conversions: [
+    { from: "pdf", to: "markdown" },
+    { from: "png", to: "webp" },
+    { from: "docx", to: "txt" }
+  ]
 });
 ```
 
 ## Configuration Options
 
-### PDF Conversion Options
+### Conversion Settings
 
 ```typescript
 interface ConversionOptions {
-  engine?: "marker" | "pymupdf4llm";        // Conversion engine
-  auto_clean?: boolean;                     // Auto-clean marker output
-  page_chunks?: boolean;                    // Process as individual pages
-  write_images?: boolean;                   // Extract embedded images
-  image_path?: string;                      // Image extraction directory
-  table_strategy?: "fast" | "accurate";    // Table extraction strategy
-  extract_content?: "text" | "figures" | "both"; // Content types
+  engine?: string;                    // Conversion engine to use
+  quality?: number;                   // Output quality (1-100)
+  preserve_formatting?: boolean;      // Maintain original formatting
+  output_format?: string;             // Specific output format
+  compression_level?: number;         // Compression level (0-9)
+  custom_options?: Record<string, any>; // Engine-specific options
 }
 ```
 
-### Document Categories
+### Supported File Types
 
-Automatic categorization supports:
-- **Research**: Analysis, studies, investigations
-- **Planning**: Strategies, roadmaps, discussions
-- **Documentation**: Guides, manuals, references
-- **Technical**: Implementation, architecture, APIs
-- **Business**: Market analysis, commercial strategies
-- **General**: Uncategorized content
+#### Input Formats
+- **Documents**: PDF, DOCX, DOC, RTF, TXT, HTML, XML
+- **Images**: PNG, JPG, JPEG, WebP, GIF, BMP, TIFF, SVG
+- **Spreadsheets**: CSV, XLSX, XLS, JSON, TSV
+- **Archives**: ZIP, TAR, GZ, 7Z, RAR (extract only)
+- **Code**: Various programming language files
 
-## Universal Project Documentation Standard
+#### Output Formats  
+- **Text**: Markdown, HTML, TXT, RTF
+- **Images**: PNG, JPG, WebP, GIF, BMP
+- **Data**: JSON, CSV, XML, YAML
+- **Archives**: ZIP, TAR, GZ
 
-### Required Files
-- `CURRENT_STATUS.md` - Real-time project status
-- `ACTIVE_PLAN.md` - Currently executing plan
-- `.claude-instructions.md` - AI assistant instructions
+## Performance Considerations
 
-### Directory Structure
-```
-/docs/
-├── plans/
-│   ├── archived/      # Completed plans
-│   └── superseded/    # Replaced plans
-├── progress/YYYY-MM/  # Monthly progress logs
-└── reference/         # Technical documentation
-    ├── 01-architecture/
-    ├── 02-apis/
-    ├── 03-development/
-    └── ...
-```
+- **Memory Usage**: Large files are processed in chunks to prevent memory issues
+- **Processing Speed**: Different engines have different speed/quality tradeoffs
+- **Batch Processing**: More efficient for multiple file conversions
+- **Caching**: Converted files can be cached to avoid re-processing
 
-### Status Management
-- **ACTIVE**: Currently executing plan
-- **ARCHIVED**: Historical/completed plan
-- **SUPERSEDED**: Replaced by newer plan
-- **BLOCKED**: Waiting for external input
+## Error Handling
+
+The server provides comprehensive error handling:
+- Input file validation and format detection
+- Graceful fallback between conversion engines
+- Detailed error messages with suggested solutions
+- Progress tracking for long-running conversions
 
 ## Development
 
 ```bash
 # Clone repository
-git clone https://github.com/cordlesssteve/document-organizer-mcp.git
-cd document-organizer-mcp
+git clone https://github.com/cordlesssteve/file-converter-mcp.git
+cd file-converter-mcp
 
 # Install dependencies
 npm install
@@ -192,34 +223,15 @@ npm run dev
 
 # Run tests
 npm test
-
-# Lint code
-npm run lint
 ```
-
-## Performance Considerations
-
-- **Memory Efficiency**: Use `page_chunks: true` for large PDFs
-- **Processing Speed**: marker is slower but higher quality than pymupdf4llm
-- **Batch Processing**: `convert_missing` tool optimizes bulk conversions
-- **Table Preservation**: marker with auto-cleaning provides best table formatting
-
-## Error Handling
-
-The server provides comprehensive error handling:
-- Dependency validation before operations
-- Graceful fallback between conversion engines
-- Detailed error messages with context
-- Progress tracking for long-running operations
 
 ## Contributing
 
 1. Fork the repository
 2. Create a feature branch
-3. Make your changes
+3. Add support for new file formats or conversion engines
 4. Add tests for new functionality
-5. Ensure all tests pass
-6. Submit a pull request
+5. Submit a pull request
 
 ## License
 
@@ -227,6 +239,6 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## Support
 
-- [Issues](https://github.com/cordlesssteve/document-organizer-mcp/issues)
-- [Discussions](https://github.com/cordlesssteve/document-organizer-mcp/discussions)
-- [Wiki](https://github.com/cordlesssteve/document-organizer-mcp/wiki)
+- [Issues](https://github.com/cordlesssteve/file-converter-mcp/issues)
+- [Discussions](https://github.com/cordlesssteve/file-converter-mcp/discussions)
+- [Wiki](https://github.com/cordlesssteve/file-converter-mcp/wiki)
